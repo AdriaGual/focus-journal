@@ -1,13 +1,16 @@
-import { Image, StyleSheet, Platform } from "react-native";
+import { Image, StyleSheet, Platform, Button } from "react-native";
 import { HelloWave } from "@/components/HelloWave";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { useAppContext } from "@/providers/AppProvider";
 import { useEffect } from "react";
+import styles from "@/styles/styles";
 
 export default function HomeScreen() {
   const { state, setState } = useAppContext();
+  let tomorrow  = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
 
   const today = new Date().toISOString().split("T")[0];
 
@@ -15,14 +18,19 @@ export default function HomeScreen() {
     const defaultDayEntry = {
       productivity: 0,
       mood: 0,
-      day: 1,
+      day: 0,
       agenda: {},
       grateful: [],
-      learned: "",
-      not_good: "",
+      learned: '',
+      not_good: '',
     };
 
-    if (!state || !state[today]) {
+    if (state && !state[today]) {
+      const existingDays = Object.values(state).map(entry => entry.day);
+      const maxDay = existingDays.length > 0 ? Math.max(...existingDays) : 0;
+
+      defaultDayEntry.day = maxDay + 1;
+
       setState((prevState) => ({
         ...prevState,
         [today]: defaultDayEntry,
@@ -41,18 +49,18 @@ export default function HomeScreen() {
       }
     >
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
+      <ThemedText style={{ marginTop: 20 }}>
+          {state ? JSON.stringify(state) : ''}
+        </ThemedText>      </ThemedView>
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Step 1: Try it</ThemedText>
         <ThemedText>
-          Edit{" "}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText>{" "}
-          to see changes. Press{" "}
+          Edit
+          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText>
+          to see changes. Press
           <ThemedText type="defaultSemiBold">
             {Platform.select({ ios: "cmd + d", android: "cmd + m" })}
-          </ThemedText>{" "}
+          </ThemedText>
           to open developer tools.
         </ThemedText>
       </ThemedView>
@@ -77,22 +85,3 @@ export default function HomeScreen() {
     </ParallaxScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: "absolute",
-  },
-});

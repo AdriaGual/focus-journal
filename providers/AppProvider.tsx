@@ -4,13 +4,12 @@ import { createContext, ReactNode, useContext, useEffect, useState } from 'react
 import 'react-native-reanimated';
 
 
-// Define the shape of the context state
 type DayEntry = {
     productivity: number;
     mood: number;
-    day: number;  // 0 = Sunday, 1 = Monday, etc.
-    agenda: Record<string, any>;  // assuming agenda is an object
-    grateful: string[];           // array of strings for things you're grateful for
+    day: number; 
+    agenda: Record<string, any>;
+    grateful: string[];
     learned: string;
     not_good: string;
   };
@@ -22,6 +21,7 @@ type DayEntry = {
   type AppContextType = {
     state: AppState | null;
     setState: React.Dispatch<React.SetStateAction<AppState | null>>;
+    clearState: () => void;
   };
   
   // Create a context with a default value of null, properly typed
@@ -30,6 +30,10 @@ type DayEntry = {
   // Create a provider component for managing the state
   export const AppProvider = ({ children }: { children: ReactNode }) => {
     const [state, setState] = useState<AppState | null>(null);
+
+    const clearState = () => {
+      setState({}); // Reset to initial empty state
+    };
   
     useEffect(() => {
       // Load persisted state on app start
@@ -59,7 +63,7 @@ type DayEntry = {
     }, [state]);
   
     return (
-      <AppContext.Provider value={{ state, setState }}>
+      <AppContext.Provider value={{ state, setState, clearState }}>
         {children}
       </AppContext.Provider>
     );
