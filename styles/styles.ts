@@ -32,16 +32,27 @@ const styles = StyleSheet.create({
     left: 0,
     position: "absolute",
   },
-  quoteContainer: {
-    marginVertical: 20,
-    padding: 16,
+  mv36: {
+    marginVertical: 36,
   },
   pb20: {
     paddingBottom: 20
   },
   textAlignCenter: {
     textAlign: 'center'
-  }
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 4,
+    padding: 4,
+    marginLeft: 16,
+    width: 30,
+    textAlign: "center",
+  },
+  underline: {
+    textDecorationLine: "underline",
+  },
 });
 
 export default styles;

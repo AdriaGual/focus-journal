@@ -1,4 +1,11 @@
-import { Image, StyleSheet, Platform, Button, View } from "react-native";
+import {
+  Image,
+  StyleSheet,
+  Platform,
+  Button,
+  View,
+  TextInput,
+} from "react-native";
 import { HelloWave } from "@/components/HelloWave";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
@@ -27,6 +34,52 @@ export default function HomeScreen() {
     month: "long",
     year: "numeric",
   }).format(today);
+
+  const handleProductivityChange = (text: string) => {
+    const productivityValue = Number(text);
+    // Validate the input
+    if (productivityValue <= 10 && productivityValue >= 0) {
+      // Check if state is defined and has today's entry
+      if (state && state[formattedToday]) {
+        setState((prevState) => {
+          if (prevState) {
+            // Ensure prevState is not null
+            return {
+              ...prevState,
+              [formattedToday]: {
+                ...prevState[formattedToday],
+                productivity: productivityValue, // Update only if valid
+              },
+            };
+          }
+          return prevState; // Return the previous state if null (shouldn't happen in normal flow)
+        });
+      }
+    }
+  };
+
+  const handleMoodChange = (text: string) => {
+    const moodValue = Number(text);
+    // Validate the input
+    if (moodValue <= 10 && moodValue >= 0) {
+      // Check if state is defined and has today's entry
+      if (state && state[formattedToday]) {
+        setState((prevState) => {
+          if (prevState) {
+            // Ensure prevState is not null
+            return {
+              ...prevState,
+              [formattedToday]: {
+                ...prevState[formattedToday],
+                mood: moodValue, // Update only if valid
+              },
+            };
+          }
+          return prevState; // Return the previous state if null (shouldn't happen in normal flow)
+        });
+      }
+    }
+  };
 
   useEffect(() => {
     const defaultDayEntry = {
@@ -63,7 +116,7 @@ export default function HomeScreen() {
           Dia: {state ? JSON.stringify(state[formattedToday]?.day) : ""}
         </ThemedText>
       </ThemedView>
-      <ThemedView style={styles.quoteContainer}>
+      <ThemedView style={styles.mv36}>
         <ThemedText style={styles.textAlignCenter} type="quote">
           {state && state[formattedToday]?.quote?.text
             ? `"${state[formattedToday].quote?.text}"`
@@ -75,9 +128,33 @@ export default function HomeScreen() {
             : ""}
         </ThemedText>
       </ThemedView>
-      <ThemedView style={[styles.row]}>
-        <ThemedText type="subtitle">Productividad: 9/10</ThemedText>
-        <ThemedText type="subtitle">Mood: 10/10</ThemedText>
+      <ThemedView style={[styles.row, styles.pb20]}>
+        <ThemedView style={[styles.row]}>
+          <ThemedText type="defaultSemiBold">Productividad:</ThemedText>
+          <TextInput
+            style={styles.input}
+            value={state ? String(state[formattedToday]?.productivity) : ""}
+            onChangeText={handleProductivityChange}
+            keyboardType="numeric"
+          />
+        </ThemedView>
+        <ThemedView style={[styles.row]}>
+          <ThemedText type="defaultSemiBold">Mood:</ThemedText>
+          <TextInput
+            style={styles.input}
+            value={state ? String(state[formattedToday]?.mood) : ""}
+            onChangeText={handleMoodChange}
+            keyboardType="numeric"
+          />
+        </ThemedView>
+      </ThemedView>
+      <ThemedView style={[styles.pb20]}>
+        <ThemedText
+          type="subtitle"
+          style={[styles.textAlignCenter, styles.underline]}
+        >
+          Agenda para hoy
+        </ThemedText>
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
         <Button title="Clear State" onPress={clearState} />
