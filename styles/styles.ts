@@ -16,10 +16,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: 'center',
   },
-  titleContainer: {
+  row: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
   stepContainer: {
     gap: 8,
@@ -32,6 +32,16 @@ const styles = StyleSheet.create({
     left: 0,
     position: "absolute",
   },
+  quoteContainer: {
+    marginVertical: 20,
+    padding: 16,
+  },
+  pb20: {
+    paddingBottom: 20
+  },
+  textAlignCenter: {
+    textAlign: 'center'
+  }
 });
 
 export default styles;

@@ -6,6 +6,7 @@ import { ThemedView } from "@/components/ThemedView";
 import { useAppContext } from "@/providers/AppProvider";
 import { useEffect } from "react";
 import styles from "@/styles/styles";
+import { quotes } from "@/constants/Quotes";
 
 export default function HomeScreen() {
   const { state, setState, clearState } = useAppContext();
@@ -36,12 +37,15 @@ export default function HomeScreen() {
       grateful: [],
       learned: "",
       not_good: "",
+      quote: { text: "", author: "" },
     };
 
     if (state && !state[formattedToday]) {
       const existingDays = Object.values(state).map((entry) => entry.day);
       const maxDay = existingDays.length > 0 ? Math.max(...existingDays) : 0;
 
+      const randomIndex = Math.floor(Math.random() * quotes.length);
+      defaultDayEntry.quote = quotes[randomIndex];
       defaultDayEntry.day = maxDay + 1;
 
       setState((prevState) => ({
@@ -53,11 +57,27 @@ export default function HomeScreen() {
 
   return (
     <ThemedView style={styles.container}>
-      <ThemedView style={styles.titleContainer}>
+      <ThemedView style={[styles.row]}>
         <ThemedText type="subtitle">{formattedDate}</ThemedText>
         <ThemedText type="subtitle">
           Dia: {state ? JSON.stringify(state[formattedToday]?.day) : ""}
         </ThemedText>
+      </ThemedView>
+      <ThemedView style={styles.quoteContainer}>
+        <ThemedText style={styles.textAlignCenter} type="quote">
+          {state && state[formattedToday]?.quote?.text
+            ? `"${state[formattedToday].quote?.text}"`
+            : "Loading quote..."}
+        </ThemedText>
+        <ThemedText style={styles.textAlignCenter} type="author">
+          {state && state[formattedToday]?.quote?.author
+            ? `${state[formattedToday].quote?.author}`
+            : ""}
+        </ThemedText>
+      </ThemedView>
+      <ThemedView style={[styles.row]}>
+        <ThemedText type="subtitle">Productividad: 9/10</ThemedText>
+        <ThemedText type="subtitle">Mood: 10/10</ThemedText>
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
         <Button title="Clear State" onPress={clearState} />
