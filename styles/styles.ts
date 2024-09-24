@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
+    justifyContent: "space-between"
   },
   stepContainer: {
     gap: 8,
