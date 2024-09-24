@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   textAlignCenter: {
     textAlign: 'center'
   },
-  input: {
+  inputNumber: {
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 4,
@@ -52,6 +52,21 @@ const styles = StyleSheet.create({
   },
   underline: {
     textDecorationLine: "underline",
+  },
+  agendaContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+  },
+  agendaRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 10,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    padding: 8,
+    flex: 1,
   },
 });
 

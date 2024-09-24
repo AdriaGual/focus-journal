@@ -5,13 +5,14 @@ import {
   Button,
   View,
   TextInput,
+  Switch,
 } from "react-native";
 import { HelloWave } from "@/components/HelloWave";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { useAppContext } from "@/providers/AppProvider";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styles from "@/styles/styles";
 import { quotes } from "@/constants/Quotes";
 
@@ -37,22 +38,19 @@ export default function HomeScreen() {
 
   const handleProductivityChange = (text: string) => {
     const productivityValue = Number(text);
-    // Validate the input
     if (productivityValue <= 10 && productivityValue >= 0) {
-      // Check if state is defined and has today's entry
       if (state && state[formattedToday]) {
         setState((prevState) => {
           if (prevState) {
-            // Ensure prevState is not null
             return {
               ...prevState,
               [formattedToday]: {
                 ...prevState[formattedToday],
-                productivity: productivityValue, // Update only if valid
+                productivity: productivityValue,
               },
             };
           }
-          return prevState; // Return the previous state if null (shouldn't happen in normal flow)
+          return prevState;
         });
       }
     }
@@ -60,24 +58,41 @@ export default function HomeScreen() {
 
   const handleMoodChange = (text: string) => {
     const moodValue = Number(text);
-    // Validate the input
     if (moodValue <= 10 && moodValue >= 0) {
-      // Check if state is defined and has today's entry
       if (state && state[formattedToday]) {
         setState((prevState) => {
           if (prevState) {
-            // Ensure prevState is not null
             return {
               ...prevState,
               [formattedToday]: {
                 ...prevState[formattedToday],
-                mood: moodValue, // Update only if valid
+                mood: moodValue,
               },
             };
           }
-          return prevState; // Return the previous state if null (shouldn't happen in normal flow)
+          return prevState;
         });
       }
+    }
+  };
+
+  const handleAgendaChange = (key: string, text: string, checked: boolean) => {
+    if (state && state[formattedToday]) {
+      setState((prevState) => {
+        if (prevState) {
+          return {
+            ...prevState,
+            [formattedToday]: {
+              ...prevState[formattedToday],
+              agenda: {
+                ...prevState[formattedToday].agenda,
+                [key]: { text, checked },
+              },
+            },
+          };
+        }
+        return prevState;
+      });
     }
   };
 
@@ -128,35 +143,73 @@ export default function HomeScreen() {
             : ""}
         </ThemedText>
       </ThemedView>
+
       <ThemedView style={[styles.row, styles.pb20]}>
         <ThemedView style={[styles.row]}>
           <ThemedText type="defaultSemiBold">Productividad:</ThemedText>
           <TextInput
-            style={styles.input}
+            style={styles.inputNumber}
             value={state ? String(state[formattedToday]?.productivity) : ""}
             onChangeText={handleProductivityChange}
             keyboardType="numeric"
           />
         </ThemedView>
+
         <ThemedView style={[styles.row]}>
           <ThemedText type="defaultSemiBold">Mood:</ThemedText>
           <TextInput
-            style={styles.input}
+            style={styles.inputNumber}
             value={state ? String(state[formattedToday]?.mood) : ""}
             onChangeText={handleMoodChange}
             keyboardType="numeric"
           />
         </ThemedView>
       </ThemedView>
+
       <ThemedView style={[styles.pb20]}>
         <ThemedText
-          type="subtitle"
           style={[styles.textAlignCenter, styles.underline]}
+          type="subtitle"
         >
           Agenda para hoy
         </ThemedText>
       </ThemedView>
-      <ThemedView style={styles.stepContainer}>
+
+      <ThemedView style={styles.agendaContainer}>
+        {["task1", "task2", "task3", "task4"].map((task, index) => (
+          <ThemedView key={index} style={styles.agendaRow}>
+            <Switch
+              value={
+                state ? !!state[formattedToday]?.agenda[task]?.checked : false
+              }
+              onValueChange={(checked) =>
+                handleAgendaChange(
+                  task,
+                  state[formattedToday]?.agenda[task]?.text || "",
+                  checked
+                )
+              }
+            />
+            <TextInput
+              style={styles.input}
+              placeholder={`Task ${index + 1}`}
+              value={
+                state ? state[formattedToday]?.agenda[task]?.text || "" : ""
+              }
+              onChangeText={(text) =>
+                handleAgendaChange(
+                  task,
+                  text,
+                  !!state[formattedToday]?.agenda[task]?.checked
+                )
+              }
+            />
+          </ThemedView>
+        ))}
+      </ThemedView>
+
+      {/* Clear Button */}
+      <ThemedView>
         <Button title="Clear State" onPress={clearState} />
       </ThemedView>
     </ThemedView>
