@@ -184,6 +184,7 @@ export default function HomeScreen() {
             value={state ? String(state[formattedToday]?.productivity) : ""}
             onChangeText={handleProductivityChange}
             keyboardType="numeric"
+            editable={!loading}
           />
         </ThemedView>
 
@@ -194,6 +195,7 @@ export default function HomeScreen() {
             value={state ? String(state[formattedToday]?.mood) : ""}
             onChangeText={handleMoodChange}
             keyboardType="numeric"
+            editable={!loading}
           />
         </ThemedView>
       </ThemedView>
@@ -212,6 +214,7 @@ export default function HomeScreen() {
           <ThemedView key={index} style={styles.agendaRow}>
             <ThemedView style={styles.switchContainer}>
               <Switch
+                disabled={loading}
                 value={
                   state ? !!state[formattedToday]?.agenda[task]?.checked : false
                 }
@@ -247,6 +250,7 @@ export default function HomeScreen() {
                     false
                 )
               }
+              editable={!loading}
             />
           </ThemedView>
         ))}
@@ -262,6 +266,7 @@ export default function HomeScreen() {
           placeholderTextColor="#B0B8C6"
           value={state ? state[formattedToday]?.grateful[0] : ""}
           onChangeText={(text) => handleGratefulChange(0, text)}
+          editable={!loading}
         />
         <TextInput
           style={[styles.input, styles.mt10]}
@@ -269,6 +274,7 @@ export default function HomeScreen() {
           placeholderTextColor="#B0B8C6"
           value={state ? state[formattedToday]?.grateful[1] : ""}
           onChangeText={(text) => handleGratefulChange(1, text)}
+          editable={!loading}
         />
       </ThemedView>
 
@@ -284,9 +290,9 @@ export default function HomeScreen() {
           numberOfLines={4}
           value={state ? state[formattedToday]?.learned : ""}
           onChangeText={(text) => handleLearnedChange(text)}
+          editable={!loading}
         />
       </ThemedView>
-
     </ThemedView>
   );
 }
