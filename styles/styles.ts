@@ -81,7 +81,31 @@ const styles = StyleSheet.create({
   },
   textArea: {
     height: 100,
-    textAlignVertical: "top", // Alinea el texto al inicio del área de texto
+    textAlignVertical: "top", 
+  },
+  listContainer: {
+    padding: 20,
+  },
+  dayItem: {
+    padding: 15,
+    marginVertical: 10,
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  dateText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  daySummary: {
+    fontSize: 14,
+    color: '#666',
   },
 });
 
