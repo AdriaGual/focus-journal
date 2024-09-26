@@ -3,14 +3,12 @@ import { ThemedView } from "@/components/ThemedView";
 import { quotes } from "@/constants/Quotes";
 import { useAppContext } from "@/providers/AppProvider";
 import styles from "@/styles/styles";
-import { useEffect } from "react";
-import {
-  Switch,
-  TextInput
-} from "react-native";
+import { useEffect, useState } from "react";
+import { Switch, TextInput } from "react-native";
 
 export default function HomeScreen() {
   const { state, setState, clearState } = useAppContext();
+  const [loading, setLoading] = useState(true);
 
   const locales = {
     en: "en-US",
@@ -129,6 +127,7 @@ export default function HomeScreen() {
   };
 
   useEffect(() => {
+    setLoading(true);
     const defaultDayEntry = {
       productivity: 0,
       mood: 0,
@@ -153,6 +152,7 @@ export default function HomeScreen() {
         [formattedToday]: defaultDayEntry,
       }));
     }
+    setLoading(false);
   }, [state, formattedToday, setState]);
 
   return (
