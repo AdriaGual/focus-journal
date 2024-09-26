@@ -79,6 +79,10 @@ const styles = StyleSheet.create({
     padding: 8,
     flex: 1, // Ensure the input takes the rest of the available space
   },
+  textArea: {
+    height: 100,
+    textAlignVertical: "top", // Alinea el texto al inicio del área de texto
+  },
 });
 
 

@@ -118,6 +118,23 @@ export default function HomeScreen() {
     }
   };
 
+  const handleLearnedChange = (text: string) => {
+    if (state && state[formattedToday]) {
+      setState((prevState) => {
+        if (prevState) {
+          return {
+            ...prevState,
+            [formattedToday]: {
+              ...prevState[formattedToday],
+              learned: text,
+            },
+          };
+        }
+        return prevState;
+      });
+    }
+  };
+
   useEffect(() => {
     const defaultDayEntry = {
       productivity: 0,
@@ -255,16 +272,28 @@ export default function HomeScreen() {
         />
         <TextInput
           style={[styles.input, styles.mt10]}
-          placeholder="Algo más por lo que te sientes agradecido..."
+          placeholder="Algo más por lo que te sientes agradecido"
           placeholderTextColor="#B0B8C6"
           value={state ? state[formattedToday]?.grateful[1] : ""}
           onChangeText={(text) => handleGratefulChange(1, text)}
         />
       </ThemedView>
 
-      <ThemedView>
-        <Button title="Clear State" onPress={clearState} />
+      <ThemedView style={styles.pb20}>
+        <ThemedText style={styles.textAlignCenter} type="author">
+          He aprendido
+        </ThemedText>
+        <TextInput
+          style={[styles.input, styles.textArea, styles.mv10]}
+          placeholder="Escribe algo que hayas aprendido..."
+          placeholderTextColor="#B0B8C6"
+          multiline={true}
+          numberOfLines={4}
+          value={state ? state[formattedToday]?.learned : ""}
+          onChangeText={(text) => handleLearnedChange(text)}
+        />
       </ThemedView>
+
     </ThemedView>
   );
 }
