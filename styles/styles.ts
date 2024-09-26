@@ -107,6 +107,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666',
   },
+  detailsContainer: {
+    padding: 10,
+    backgroundColor: '#f9f9f9',
+    borderRadius: 4
+  },
 });
 
 

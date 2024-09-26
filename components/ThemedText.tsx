@@ -12,7 +12,8 @@ export type ThemedTextProps = TextProps & {
     | "subtitle"
     | "link"
     | "quote"
-    | "author";
+    | "author"
+    | "details";
 };
 
 export function ThemedText({
@@ -35,6 +36,7 @@ export function ThemedText({
         type === "link" ? styles.link : undefined,
         type === "quote" ? styles.quote : undefined,
         type === "author" ? styles.author : undefined,
+        type === "details" ? styles.details : undefined,
         style,
       ]}
       {...rest}
@@ -74,4 +76,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
+  details: {
+    fontSize: 12,
+  }
 });

@@ -6,43 +6,60 @@ import styles from "@/styles/styles";
 import { useEffect, useState } from "react";
 import { Switch, TextInput } from "react-native";
 
-export default function HomeScreen() {
-  const { state, setState, clearState } = useAppContext();
-  const [loading, setLoading] = useState(true);
+interface DayEntry {
+  productivity: number;
+  mood: number;
+  day: number;
+  agenda: Record<string, { text: string; checked: boolean }>;
+  grateful: string[];
+  learned: string;
+  not_good: string;
+  quote: { text: string; author: string };
+}
 
+interface AppState {
+  [key: string]: DayEntry;
+}
+
+interface AppContextType {
+  state: AppState | null;
+  setState: (state: AppState | ((prevState: AppState) => AppState)) => void;
+  clearState: () => void;
+}
+
+export default function HomeScreen() {
+  const { state, setState, clearState } = useAppContext() as AppContextType;
+  const [loading, setLoading] = useState<boolean>(true);
+  const [formattedToday, setFormattedToday] = useState<string | undefined>();
+  const [today, setToday] = useState<Date | undefined>();
+  
   const locales = {
     en: "en-US",
     es: "es-ES",
     ca: "ca-ES",
   };
 
-  const today = new Date();
-  const formattedToday = today.toISOString().split("T")[0];
-
   const currentLanguage = "es";
 
-  const formattedDate = new Intl.DateTimeFormat(locales[currentLanguage], {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  }).format(today);
+  const formattedDate = today 
+    ? new Intl.DateTimeFormat(locales[currentLanguage], {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      }).format(today)
+    : "";
 
   const handleProductivityChange = (text: string) => {
     const productivityValue = Number(text);
     if (productivityValue <= 10 && productivityValue >= 0) {
-      if (state && state[formattedToday]) {
-        setState((prevState) => {
-          if (prevState) {
-            return {
-              ...prevState,
-              [formattedToday]: {
-                ...prevState[formattedToday],
-                productivity: productivityValue,
-              },
-            };
-          }
-          return prevState;
-        });
+      if (state && formattedToday) {
+        setState((prevState) => ({
+          ...prevState,
+          [formattedToday]: {
+            ...prevState[formattedToday],
+            productivity: productivityValue,
+          },
+        }));
       }
     }
   };
@@ -50,85 +67,67 @@ export default function HomeScreen() {
   const handleMoodChange = (text: string) => {
     const moodValue = Number(text);
     if (moodValue <= 10 && moodValue >= 0) {
-      if (state && state[formattedToday]) {
-        setState((prevState) => {
-          if (prevState) {
-            return {
-              ...prevState,
-              [formattedToday]: {
-                ...prevState[formattedToday],
-                mood: moodValue,
-              },
-            };
-          }
-          return prevState;
-        });
+      if (state && formattedToday) {
+        setState((prevState) => ({
+          ...prevState,
+          [formattedToday]: {
+            ...prevState[formattedToday],
+            mood: moodValue,
+          },
+        }));
       }
     }
   };
 
   const handleAgendaChange = (key: string, text: string, checked: boolean) => {
-    if (state && state[formattedToday]) {
-      setState((prevState) => {
-        if (prevState) {
-          return {
-            ...prevState,
-            [formattedToday]: {
-              ...prevState[formattedToday],
-              agenda: {
-                ...prevState[formattedToday].agenda,
-                [key]: { text, checked },
-              },
-            },
-          };
-        }
-        return prevState;
-      });
+    if (state && formattedToday) {
+      setState((prevState) => ({
+        ...prevState,
+        [formattedToday]: {
+          ...prevState[formattedToday],
+          agenda: {
+            ...prevState[formattedToday].agenda,
+            [key]: { text, checked },
+          },
+        },
+      }));
     }
   };
 
   const handleGratefulChange = (index: number, text: string) => {
-    if (state && state[formattedToday]) {
+    if (state && formattedToday) {
       setState((prevState) => {
-        if (prevState) {
-          const updatedGrateful = [
-            ...(prevState[formattedToday]?.grateful || []),
-          ];
-          updatedGrateful[index] = text;
+        const updatedGrateful = [
+          ...(prevState[formattedToday]?.grateful || []),
+        ];
+        updatedGrateful[index] = text;
 
-          return {
-            ...prevState,
-            [formattedToday]: {
-              ...prevState[formattedToday],
-              grateful: updatedGrateful,
-            },
-          };
-        }
-        return prevState;
+        return {
+          ...prevState,
+          [formattedToday]: {
+            ...prevState[formattedToday],
+            grateful: updatedGrateful,
+          },
+        };
       });
     }
   };
 
   const handleLearnedChange = (text: string) => {
-    if (state && state[formattedToday]) {
-      setState((prevState) => {
-        if (prevState) {
-          return {
-            ...prevState,
-            [formattedToday]: {
-              ...prevState[formattedToday],
-              learned: text,
-            },
-          };
-        }
-        return prevState;
-      });
+    if (state && formattedToday) {
+      setState((prevState) => ({
+        ...prevState,
+        [formattedToday]: {
+          ...prevState[formattedToday],
+          learned: text,
+        },
+      }));
     }
   };
 
   useEffect(() => {
     setLoading(true);
-    const defaultDayEntry = {
+    const defaultDayEntry: DayEntry = {
       productivity: 0,
       mood: 0,
       day: 0,
@@ -139,7 +138,13 @@ export default function HomeScreen() {
       quote: { text: "", author: "" },
     };
 
-    if (state && !state[formattedToday]) {
+    const today = new Date();
+    today.setHours(today.getHours() + 2); // Add 2 hours to the current time
+    setToday(today);
+    const formattedDateString = today.toISOString().split("T")[0];
+    setFormattedToday(formattedDateString);
+
+    if (state && !state[formattedDateString]) {
       const existingDays = Object.values(state).map((entry) => entry.day);
       const maxDay = existingDays.length > 0 ? Math.max(...existingDays) : 0;
 
@@ -149,28 +154,28 @@ export default function HomeScreen() {
 
       setState((prevState) => ({
         ...prevState,
-        [formattedToday]: defaultDayEntry,
+        [formattedDateString]: defaultDayEntry,
       }));
     }
     setLoading(false);
-  }, [state, formattedToday, setState]);
+  }, [state, setState]);
 
   return (
     <ThemedView style={styles.container}>
       <ThemedView style={[styles.row]}>
         <ThemedText type="subtitle">{formattedDate}</ThemedText>
         <ThemedText type="subtitle">
-          Dia: {state ? JSON.stringify(state[formattedToday]?.day) : ""}
+          Dia: {state ? JSON.stringify(state[formattedToday!]?.day) : ""}
         </ThemedText>
       </ThemedView>
       <ThemedView style={styles.mv36}>
         <ThemedText style={styles.textAlignCenter} type="quote">
-          {state && state[formattedToday]?.quote?.text
+          {state && formattedToday && state[formattedToday]?.quote?.text
             ? `"${state[formattedToday].quote?.text}"`
             : "Loading quote..."}
         </ThemedText>
         <ThemedText style={styles.textAlignCenter} type="author">
-          {state && state[formattedToday]?.quote?.author
+          {state && formattedToday && state[formattedToday]?.quote?.author
             ? `${state[formattedToday].quote?.author}`
             : ""}
         </ThemedText>
@@ -181,7 +186,7 @@ export default function HomeScreen() {
           <ThemedText type="defaultSemiBold">Productividad:</ThemedText>
           <TextInput
             style={styles.inputNumber}
-            value={state ? String(state[formattedToday]?.productivity) : ""}
+            value={state ? String(state[formattedToday!]?.productivity ?? '') : ''}
             onChangeText={handleProductivityChange}
             keyboardType="numeric"
             editable={!loading}
@@ -192,7 +197,7 @@ export default function HomeScreen() {
           <ThemedText type="defaultSemiBold">Mood:</ThemedText>
           <TextInput
             style={styles.inputNumber}
-            value={state ? String(state[formattedToday]?.mood) : ""}
+            value={state ? String(state[formattedToday!]?.mood ?? '') : ''}
             onChangeText={handleMoodChange}
             keyboardType="numeric"
             editable={!loading}
@@ -215,13 +220,21 @@ export default function HomeScreen() {
             <ThemedView style={styles.switchContainer}>
               <Switch
                 disabled={loading}
+                thumbColor={
+                  state
+                    ? state[formattedToday!]?.agenda[task]?.checked
+                      ? "#A9D8E4"
+                      : "#ffffff"
+                    : "#ffffff"
+                }
+                trackColor={{ false: "#A9D8E4", true: "#A9D8E4" }}
                 value={
-                  state ? !!state[formattedToday]?.agenda[task]?.checked : false
+                  state ? !!state[formattedToday!]?.agenda[task]?.checked : false
                 }
                 onValueChange={(checked) =>
                   handleAgendaChange(
                     task,
-                    (state && state[formattedToday]?.agenda[task]?.text) || "",
+                    (state && state[formattedToday!]?.agenda[task]?.text) || "",
                     checked
                   )
                 }
@@ -240,14 +253,13 @@ export default function HomeScreen() {
               }
               placeholderTextColor="#B0B8C6"
               value={
-                state ? state[formattedToday]?.agenda[task]?.text || "" : ""
+                state ? state[formattedToday!]?.agenda[task]?.text || "" : ""
               }
               onChangeText={(text) =>
                 handleAgendaChange(
                   task,
                   text,
-                  (state && !!state[formattedToday]?.agenda[task]?.checked) ||
-                    false
+                  (state && !!state[formattedToday!]?.agenda[task]?.checked) || false
                 )
               }
               editable={!loading}
@@ -264,7 +276,7 @@ export default function HomeScreen() {
           style={[styles.input, styles.mv10]}
           placeholder="¿Por qué te sientes agradecido hoy?"
           placeholderTextColor="#B0B8C6"
-          value={state ? state[formattedToday]?.grateful[0] : ""}
+          value={state ? state[formattedToday!]?.grateful[0] ?? '' : ''}
           onChangeText={(text) => handleGratefulChange(0, text)}
           editable={!loading}
         />
@@ -272,7 +284,7 @@ export default function HomeScreen() {
           style={[styles.input, styles.mt10]}
           placeholder="Algo más por lo que te sientes agradecido"
           placeholderTextColor="#B0B8C6"
-          value={state ? state[formattedToday]?.grateful[1] : ""}
+          value={state ? state[formattedToday!]?.grateful[1] ?? '' : ''}
           onChangeText={(text) => handleGratefulChange(1, text)}
           editable={!loading}
         />
@@ -288,7 +300,7 @@ export default function HomeScreen() {
           placeholderTextColor="#B0B8C6"
           multiline={true}
           numberOfLines={4}
-          value={state ? state[formattedToday]?.learned : ""}
+          value={state ? state[formattedToday!]?.learned : ""}
           onChangeText={(text) => handleLearnedChange(text)}
           editable={!loading}
         />
