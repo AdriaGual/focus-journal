@@ -1,50 +1,53 @@
-# Welcome to your Expo app 👋
+# Focus Journal 📒
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## Overview
 
-## Get started
+This is a personal journal application that allows users to log daily productivity, mood, tasks, things they are grateful for, and lessons learned. It offers a clean and user-friendly interface to help users reflect on their daily activities.
+![image](https://github.com/user-attachments/assets/46f2d713-d026-4e1e-acbb-79c9d5aa56a4)
 
-1. Install dependencies
 
-   ```bash
-   npm install
-   ```
+## Features
 
-2. Start the app
+- **Daily Log**: Users can record their productivity and mood on a scale from 0 to 10.
+- **Agenda**: Users can create tasks for the day and mark them as completed.
+- **Gratitude Section**: Users can note down what they are grateful for each day.
+- **Learning Section**: Users can reflect on what they've learned.
+- **Quotes**: Random quotes to inspire users daily.
 
-   ```bash
+## Technologies Used
+
+- **React Native**: For building mobile user interfaces.
+- **Expo**: For an easier development and deployment process.
+- **Context API**: For state management across components.
+- **TypeScript**: For type safety and better developer experience.
+
+## Installation
+
+To get started with the app, follow these steps:
+
+1. **Clone the repository**:
+
+2. **Install dependencies**:
+    ```bash
+    npm install
+    ```
+
+3. **Run the app**:
+    ```bash
     npx expo start
-   ```
+    ```
 
-In the output, you'll find options to open the app in a
+4. **Open the Expo app** on your mobile device and scan the QR code to see the app in action.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Code Structure
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+- **`src/components`**: Contains reusable components such as `ThemedText` and `ThemedView`.
+- **`src/constants`**: Holds constants such as quotes used in the app.
+- **`src/providers`**: Contains the `AppProvider` for context API.
+- **`src/styles`**: Defines global styles used throughout the app.
 
-## Get a fresh project
+## Usage
 
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- **Logging Productivity & Mood**: Enter a value between 0-10 for both productivity and mood.
+- **Managing Tasks**: Users can add tasks for the day and toggle their completion status using a switch.
+- **Gratitude and Learning**: Input your thoughts in the provided text areas.
