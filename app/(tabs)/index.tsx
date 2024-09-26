@@ -166,7 +166,7 @@ export default function HomeScreen() {
         </ThemedView>
       </ThemedView>
 
-      <ThemedView style={[styles.pb20]}>
+      <ThemedView>
         <ThemedText
           style={[styles.textAlignCenter, styles.underline]}
           type="subtitle"
@@ -175,24 +175,27 @@ export default function HomeScreen() {
         </ThemedText>
       </ThemedView>
 
-      <ThemedView style={styles.agendaContainer}>
+      <ThemedView style={[styles.agendaContainer, styles.pb20]}>
         {["task1", "task2", "task3", "task4"].map((task, index) => (
           <ThemedView key={index} style={styles.agendaRow}>
-            <Switch
-              value={
-                state ? !!state[formattedToday]?.agenda[task]?.checked : false
-              }
-              onValueChange={(checked) =>
-                handleAgendaChange(
-                  task,
-                  state[formattedToday]?.agenda[task]?.text || "",
-                  checked
-                )
-              }
-            />
+            <ThemedView style={styles.switchContainer}>
+              <Switch
+                value={
+                  state ? !!state[formattedToday]?.agenda[task]?.checked : false
+                }
+                onValueChange={(checked) =>
+                  handleAgendaChange(
+                    task,
+                    (state && state[formattedToday]?.agenda[task]?.text) || "",
+                    checked
+                  )
+                }
+              />
+            </ThemedView>
             <TextInput
               style={styles.input}
-              placeholder={`Task ${index + 1}`}
+              placeholder={`Introducir tarea`}
+              placeholderTextColor="#B0B8C6"
               value={
                 state ? state[formattedToday]?.agenda[task]?.text || "" : ""
               }
@@ -200,7 +203,8 @@ export default function HomeScreen() {
                 handleAgendaChange(
                   task,
                   text,
-                  !!state[formattedToday]?.agenda[task]?.checked
+                  (state && !!state[formattedToday]?.agenda[task]?.checked) ||
+                    false
                 )
               }
             />
@@ -208,7 +212,15 @@ export default function HomeScreen() {
         ))}
       </ThemedView>
 
-      {/* Clear Button */}
+      <ThemedView>
+        <ThemedText
+          style={[styles.textAlignCenter]}
+          type="author"
+        >
+          Estoy agradecido por 
+        </ThemedText>
+      </ThemedView>
+
       <ThemedView>
         <Button title="Clear State" onPress={clearState} />
       </ThemedView>
