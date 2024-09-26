@@ -34,6 +34,12 @@ const styles = StyleSheet.create({
   mv36: {
     marginVertical: 36,
   },
+  mv10: {
+    marginVertical: 10,
+  },
+  mt10: {
+    marginTop: 10,
+  },
   pb20: {
     paddingBottom: 20
   },

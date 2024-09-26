@@ -96,13 +96,35 @@ export default function HomeScreen() {
     }
   };
 
+  const handleGratefulChange = (index: number, text: string) => {
+    if (state && state[formattedToday]) {
+      setState((prevState) => {
+        if (prevState) {
+          const updatedGrateful = [
+            ...(prevState[formattedToday]?.grateful || []),
+          ];
+          updatedGrateful[index] = text;
+
+          return {
+            ...prevState,
+            [formattedToday]: {
+              ...prevState[formattedToday],
+              grateful: updatedGrateful,
+            },
+          };
+        }
+        return prevState;
+      });
+    }
+  };
+
   useEffect(() => {
     const defaultDayEntry = {
       productivity: 0,
       mood: 0,
       day: 0,
       agenda: {},
-      grateful: [],
+      grateful: ["", ""], // Default two empty values for grateful
       learned: "",
       not_good: "",
       quote: { text: "", author: "" },
@@ -212,13 +234,24 @@ export default function HomeScreen() {
         ))}
       </ThemedView>
 
-      <ThemedView>
-        <ThemedText
-          style={[styles.textAlignCenter]}
-          type="author"
-        >
-          Estoy agradecido por 
+      <ThemedView style={styles.pb20}>
+        <ThemedText style={styles.textAlignCenter} type="author">
+          Estoy agradecido por
         </ThemedText>
+        <TextInput
+          style={[styles.input, styles.mv10]}
+          placeholder="¿Por qué te sientes agradecido hoy?"
+          placeholderTextColor="#B0B8C6"
+          value={state ? state[formattedToday]?.grateful[0] : ""}
+          onChangeText={(text) => handleGratefulChange(0, text)}
+        />
+        <TextInput
+          style={[styles.input, styles.mt10]}
+          placeholder="Algo más por lo que te sientes agradecido..."
+          placeholderTextColor="#B0B8C6"
+          value={state ? state[formattedToday]?.grateful[1] : ""}
+          onChangeText={(text) => handleGratefulChange(1, text)}
+        />
       </ThemedView>
 
       <ThemedView>
