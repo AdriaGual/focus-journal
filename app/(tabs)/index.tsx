@@ -216,7 +216,15 @@ export default function HomeScreen() {
             </ThemedView>
             <TextInput
               style={styles.input}
-              placeholder={`Introducir tarea`}
+              placeholder={
+                index === 0
+                  ? "Primera tarea importante del día"
+                  : index === 1
+                  ? "Otra tarea clave a completar"
+                  : index === 2
+                  ? "Tarea secundaria o menor"
+                  : "Algo adicional por hacer hoy"
+              }
               placeholderTextColor="#B0B8C6"
               value={
                 state ? state[formattedToday]?.agenda[task]?.text || "" : ""
