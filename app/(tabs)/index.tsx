@@ -1,20 +1,13 @@
-import {
-  Image,
-  StyleSheet,
-  Platform,
-  Button,
-  View,
-  TextInput,
-  Switch,
-} from "react-native";
-import { HelloWave } from "@/components/HelloWave";
-import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { useAppContext } from "@/providers/AppProvider";
-import { useEffect, useState } from "react";
-import styles from "@/styles/styles";
 import { quotes } from "@/constants/Quotes";
+import { useAppContext } from "@/providers/AppProvider";
+import styles from "@/styles/styles";
+import { useEffect } from "react";
+import {
+  Switch,
+  TextInput
+} from "react-native";
 
 export default function HomeScreen() {
   const { state, setState, clearState } = useAppContext();
@@ -141,7 +134,7 @@ export default function HomeScreen() {
       mood: 0,
       day: 0,
       agenda: {},
-      grateful: ["", ""], // Default two empty values for grateful
+      grateful: ["", ""],
       learned: "",
       not_good: "",
       quote: { text: "", author: "" },
