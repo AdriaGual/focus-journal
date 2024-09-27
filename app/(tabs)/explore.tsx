@@ -32,7 +32,7 @@ export default function TabTwoScreen() {
         >
           <ThemedText style={styles.dateText}>{item.date}</ThemedText>
           <ThemedText style={styles.daySummary}>
-            Productividad: {item.dayInfo.productivity} | Mood:{" "}
+            Productividad: {item.dayInfo.productivity} | Ánimo:{" "}
             {item.dayInfo.mood}
           </ThemedText>
           <Ionicons

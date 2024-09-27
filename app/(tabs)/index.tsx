@@ -170,7 +170,7 @@ export default function HomeScreen() {
           </ThemedView>
 
           <ThemedView style={[styles.row]}>
-            <ThemedText type="defaultSemiBold">Mood:</ThemedText>
+            <ThemedText type="defaultSemiBold">Ánimo:</ThemedText>
             <TextInput
               style={styles.inputNumber}
               value={state ? String(state[formattedToday!]?.mood ?? "") : ""}
