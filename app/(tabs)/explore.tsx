@@ -1,16 +1,11 @@
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { DayEntry } from "@/interfaces/DayEntry";
+import { DayEntry, DayItem } from "@/interfaces/DayEntry";
 import { useAppContext } from "@/providers/AppProvider";
 import styles from "@/styles/styles";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useState } from "react";
 import { FlatList, TouchableOpacity, View } from "react-native";
-
-type DayItem = {
-  date: string;
-  dayInfo: DayEntry;
-};
 
 export default function TabTwoScreen() {
   const { state } = useAppContext();

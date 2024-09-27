@@ -1,47 +1,21 @@
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import { defaultDayEntry } from "@/constants/DayEntry";
+import { currentLanguage, locales } from "@/constants/Languages";
 import { quotes } from "@/constants/Quotes";
+import { AppContextType } from "@/interfaces/AppContextType";
 import { useAppContext } from "@/providers/AppProvider";
 import styles from "@/styles/styles";
 import { useEffect, useState } from "react";
 import { Switch, TextInput } from "react-native";
 
-interface DayEntry {
-  productivity: number;
-  mood: number;
-  day: number;
-  agenda: Record<string, { text: string; checked: boolean }>;
-  grateful: string[];
-  learned: string;
-  not_good: string;
-  quote: { text: string; author: string };
-}
-
-interface AppState {
-  [key: string]: DayEntry;
-}
-
-interface AppContextType {
-  state: AppState | null;
-  setState: (state: AppState | ((prevState: AppState) => AppState)) => void;
-  clearState: () => void;
-}
-
 export default function HomeScreen() {
-  const { state, setState, clearState } = useAppContext() as AppContextType;
+  const { state, setState } = useAppContext() as AppContextType;
   const [loading, setLoading] = useState<boolean>(true);
   const [formattedToday, setFormattedToday] = useState<string | undefined>();
   const [today, setToday] = useState<Date | undefined>();
-  
-  const locales = {
-    en: "en-US",
-    es: "es-ES",
-    ca: "ca-ES",
-  };
 
-  const currentLanguage = "es";
-
-  const formattedDate = today 
+  const formattedDate = today
     ? new Intl.DateTimeFormat(locales[currentLanguage], {
         day: "2-digit",
         month: "long",
@@ -127,16 +101,6 @@ export default function HomeScreen() {
 
   useEffect(() => {
     setLoading(true);
-    const defaultDayEntry: DayEntry = {
-      productivity: 0,
-      mood: 0,
-      day: 0,
-      agenda: {},
-      grateful: ["", ""],
-      learned: "",
-      not_good: "",
-      quote: { text: "", author: "" },
-    };
 
     const today = new Date();
     today.setHours(today.getHours() + 2); // Add 2 hours to the current time
@@ -186,7 +150,9 @@ export default function HomeScreen() {
           <ThemedText type="defaultSemiBold">Productividad:</ThemedText>
           <TextInput
             style={styles.inputNumber}
-            value={state ? String(state[formattedToday!]?.productivity ?? '') : ''}
+            value={
+              state ? String(state[formattedToday!]?.productivity ?? "") : ""
+            }
             onChangeText={handleProductivityChange}
             keyboardType="numeric"
             editable={!loading}
@@ -197,7 +163,7 @@ export default function HomeScreen() {
           <ThemedText type="defaultSemiBold">Mood:</ThemedText>
           <TextInput
             style={styles.inputNumber}
-            value={state ? String(state[formattedToday!]?.mood ?? '') : ''}
+            value={state ? String(state[formattedToday!]?.mood ?? "") : ""}
             onChangeText={handleMoodChange}
             keyboardType="numeric"
             editable={!loading}
@@ -229,7 +195,9 @@ export default function HomeScreen() {
                 }
                 trackColor={{ false: "#A9D8E4", true: "#A9D8E4" }}
                 value={
-                  state ? !!state[formattedToday!]?.agenda[task]?.checked : false
+                  state
+                    ? !!state[formattedToday!]?.agenda[task]?.checked
+                    : false
                 }
                 onValueChange={(checked) =>
                   handleAgendaChange(
@@ -259,7 +227,8 @@ export default function HomeScreen() {
                 handleAgendaChange(
                   task,
                   text,
-                  (state && !!state[formattedToday!]?.agenda[task]?.checked) || false
+                  (state && !!state[formattedToday!]?.agenda[task]?.checked) ||
+                    false
                 )
               }
               editable={!loading}
@@ -276,7 +245,7 @@ export default function HomeScreen() {
           style={[styles.input, styles.mv10]}
           placeholder="¿Por qué te sientes agradecido hoy?"
           placeholderTextColor="#B0B8C6"
-          value={state ? state[formattedToday!]?.grateful[0] ?? '' : ''}
+          value={state ? state[formattedToday!]?.grateful[0] ?? "" : ""}
           onChangeText={(text) => handleGratefulChange(0, text)}
           editable={!loading}
         />
@@ -284,7 +253,7 @@ export default function HomeScreen() {
           style={[styles.input, styles.mt10]}
           placeholder="Algo más por lo que te sientes agradecido"
           placeholderTextColor="#B0B8C6"
-          value={state ? state[formattedToday!]?.grateful[1] ?? '' : ''}
+          value={state ? state[formattedToday!]?.grateful[1] ?? "" : ""}
           onChangeText={(text) => handleGratefulChange(1, text)}
           editable={!loading}
         />
