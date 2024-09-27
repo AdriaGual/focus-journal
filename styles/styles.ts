@@ -64,13 +64,7 @@ const styles = StyleSheet.create({
   },
   agendaRow: {
     flexDirection: "row",
-    alignItems: "center",
     marginVertical: 10,
-    width: '100%', // Ensure row takes full width
-  },
-  switchContainer: {
-    width: 60, // Give the switch container a fixed width
-    marginRight: 10,
   },
   input: {
     borderRadius: 4,
@@ -111,6 +105,13 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: '#f9f9f9',
     borderRadius: 4
+  },
+  scrollContainer: {
+    paddingHorizontal: 16 ,
+    paddingTop: 40,
+    flexGrow: 1,
+    justifyContent: 'space-between',
+    backgroundColor: '#ffffff'
   },
 });
 

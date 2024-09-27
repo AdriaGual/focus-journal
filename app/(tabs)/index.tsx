@@ -7,7 +7,13 @@ import { AppContextType } from "@/interfaces/AppContextType";
 import { useAppContext } from "@/providers/AppProvider";
 import styles from "@/styles/styles";
 import { useEffect, useState } from "react";
-import { Switch, TextInput } from "react-native";
+import {
+  ScrollView,
+  Switch,
+  TextInput,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 
 export default function HomeScreen() {
   const { state, setState } = useAppContext() as AppContextType;
@@ -125,155 +131,160 @@ export default function HomeScreen() {
   }, [state, setState]);
 
   return (
-    <ThemedView style={styles.container}>
-      <ThemedView style={[styles.row]}>
-        <ThemedText type="subtitle">{formattedDate}</ThemedText>
-        <ThemedText type="subtitle">
-          Dia: {state ? JSON.stringify(state[formattedToday!]?.day) : ""}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.mv36}>
-        <ThemedText style={styles.textAlignCenter} type="quote">
-          {state && formattedToday && state[formattedToday]?.quote?.text
-            ? `"${state[formattedToday].quote?.text}"`
-            : "Loading quote..."}
-        </ThemedText>
-        <ThemedText style={styles.textAlignCenter} type="author">
-          {state && formattedToday && state[formattedToday]?.quote?.author
-            ? `${state[formattedToday].quote?.author}`
-            : ""}
-        </ThemedText>
-      </ThemedView>
-
-      <ThemedView style={[styles.row, styles.pb20]}>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+    >
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
         <ThemedView style={[styles.row]}>
-          <ThemedText type="defaultSemiBold">Productividad:</ThemedText>
-          <TextInput
-            style={styles.inputNumber}
-            value={
-              state ? String(state[formattedToday!]?.productivity ?? "") : ""
-            }
-            onChangeText={handleProductivityChange}
-            keyboardType="numeric"
-            editable={!loading}
-          />
+          <ThemedText type="subtitle">{formattedDate}</ThemedText>
+          <ThemedText type="subtitle">
+            Dia: {state ? JSON.stringify(state[formattedToday!]?.day) : ""}
+          </ThemedText>
+        </ThemedView>
+        <ThemedView style={styles.mv36}>
+          <ThemedText style={styles.textAlignCenter} type="quote">
+            {state && formattedToday && state[formattedToday]?.quote?.text
+              ? `"${state[formattedToday].quote?.text}"`
+              : "Loading quote..."}
+          </ThemedText>
+          <ThemedText style={styles.textAlignCenter} type="author">
+            {state && formattedToday && state[formattedToday]?.quote?.author
+              ? `${state[formattedToday].quote?.author}`
+              : ""}
+          </ThemedText>
         </ThemedView>
 
-        <ThemedView style={[styles.row]}>
-          <ThemedText type="defaultSemiBold">Mood:</ThemedText>
-          <TextInput
-            style={styles.inputNumber}
-            value={state ? String(state[formattedToday!]?.mood ?? "") : ""}
-            onChangeText={handleMoodChange}
-            keyboardType="numeric"
-            editable={!loading}
-          />
-        </ThemedView>
-      </ThemedView>
-
-      <ThemedView>
-        <ThemedText
-          style={[styles.textAlignCenter, styles.underline]}
-          type="subtitle"
-        >
-          Agenda para hoy
-        </ThemedText>
-      </ThemedView>
-
-      <ThemedView style={[styles.agendaContainer, styles.pb20]}>
-        {["task1", "task2", "task3", "task4"].map((task, index) => (
-          <ThemedView key={index} style={styles.agendaRow}>
-            <ThemedView style={styles.switchContainer}>
-              <Switch
-                disabled={loading}
-                thumbColor={
-                  state
-                    ? state[formattedToday!]?.agenda[task]?.checked
-                      ? "#A9D8E4"
-                      : "#ffffff"
-                    : "#ffffff"
-                }
-                trackColor={{ false: "#A9D8E4", true: "#A9D8E4" }}
-                value={
-                  state
-                    ? !!state[formattedToday!]?.agenda[task]?.checked
-                    : false
-                }
-                onValueChange={(checked) =>
-                  handleAgendaChange(
-                    task,
-                    (state && state[formattedToday!]?.agenda[task]?.text) || "",
-                    checked
-                  )
-                }
-              />
-            </ThemedView>
+        <ThemedView style={[styles.row, styles.pb20]}>
+          <ThemedView style={[styles.row]}>
+            <ThemedText type="defaultSemiBold">Productividad:</ThemedText>
             <TextInput
-              style={styles.input}
-              placeholder={
-                index === 0
-                  ? "Primera tarea importante del día"
-                  : index === 1
-                  ? "Otra tarea clave a completar"
-                  : index === 2
-                  ? "Tarea secundaria o menor"
-                  : "Algo adicional por hacer hoy"
-              }
-              placeholderTextColor="#B0B8C6"
+              style={styles.inputNumber}
               value={
-                state ? state[formattedToday!]?.agenda[task]?.text || "" : ""
+                state ? String(state[formattedToday!]?.productivity ?? "") : ""
               }
-              onChangeText={(text) =>
-                handleAgendaChange(
-                  task,
-                  text,
-                  (state && !!state[formattedToday!]?.agenda[task]?.checked) ||
-                    false
-                )
-              }
+              onChangeText={handleProductivityChange}
+              keyboardType="numeric"
               editable={!loading}
             />
           </ThemedView>
-        ))}
-      </ThemedView>
 
-      <ThemedView style={styles.pb20}>
-        <ThemedText style={styles.textAlignCenter} type="author">
-          Estoy agradecido por
-        </ThemedText>
-        <TextInput
-          style={[styles.input, styles.mv10]}
-          placeholder="¿Por qué te sientes agradecido hoy?"
-          placeholderTextColor="#B0B8C6"
-          value={state ? state[formattedToday!]?.grateful[0] ?? "" : ""}
-          onChangeText={(text) => handleGratefulChange(0, text)}
-          editable={!loading}
-        />
-        <TextInput
-          style={[styles.input, styles.mt10]}
-          placeholder="Algo más por lo que te sientes agradecido"
-          placeholderTextColor="#B0B8C6"
-          value={state ? state[formattedToday!]?.grateful[1] ?? "" : ""}
-          onChangeText={(text) => handleGratefulChange(1, text)}
-          editable={!loading}
-        />
-      </ThemedView>
+          <ThemedView style={[styles.row]}>
+            <ThemedText type="defaultSemiBold">Mood:</ThemedText>
+            <TextInput
+              style={styles.inputNumber}
+              value={state ? String(state[formattedToday!]?.mood ?? "") : ""}
+              onChangeText={handleMoodChange}
+              keyboardType="numeric"
+              editable={!loading}
+            />
+          </ThemedView>
+        </ThemedView>
 
-      <ThemedView style={styles.pb20}>
-        <ThemedText style={styles.textAlignCenter} type="author">
-          He aprendido
-        </ThemedText>
-        <TextInput
-          style={[styles.input, styles.textArea, styles.mv10]}
-          placeholder="Escribe algo que hayas aprendido..."
-          placeholderTextColor="#B0B8C6"
-          multiline={true}
-          numberOfLines={4}
-          value={state ? state[formattedToday!]?.learned : ""}
-          onChangeText={(text) => handleLearnedChange(text)}
-          editable={!loading}
-        />
-      </ThemedView>
-    </ThemedView>
+        <ThemedView>
+          <ThemedText
+            style={[styles.textAlignCenter, styles.underline]}
+            type="subtitle"
+          >
+            Agenda para hoy
+          </ThemedText>
+        </ThemedView>
+
+        <ThemedView style={[styles.agendaContainer, styles.pb20]}>
+          {["task1", "task2", "task3", "task4"].map((task, index) => (
+            <ThemedView key={index} style={styles.agendaRow}>
+                <Switch
+                  disabled={loading}
+                  thumbColor={
+                    state
+                      ? state[formattedToday!]?.agenda[task]?.checked
+                        ? "#A9D8E4"
+                        : "#ffffff"
+                      : "#ffffff"
+                  }
+                  trackColor={{ false: "#A9D8E4", true: "#A9D8E4" }}
+                  value={
+                    state
+                      ? !!state[formattedToday!]?.agenda[task]?.checked
+                      : false
+                  }
+                  onValueChange={(checked) =>
+                    handleAgendaChange(
+                      task,
+                      (state && state[formattedToday!]?.agenda[task]?.text) ||
+                        "",
+                      checked
+                    )
+                  }
+                />
+              <TextInput
+                style={styles.input}
+                placeholder={
+                  index === 0
+                    ? "Primera tarea importante del día"
+                    : index === 1
+                    ? "Otra tarea clave a completar"
+                    : index === 2
+                    ? "Tarea secundaria o menor"
+                    : "Algo adicional por hacer hoy"
+                }
+                placeholderTextColor="#B0B8C6"
+                value={
+                  state ? state[formattedToday!]?.agenda[task]?.text || "" : ""
+                }
+                onChangeText={(text) =>
+                  handleAgendaChange(
+                    task,
+                    text,
+                    (state &&
+                      !!state[formattedToday!]?.agenda[task]?.checked) ||
+                      false
+                  )
+                }
+                editable={!loading}
+              />
+            </ThemedView>
+          ))}
+        </ThemedView>
+
+        <ThemedView style={styles.pb20}>
+          <ThemedText style={styles.textAlignCenter} type="author">
+            Estoy agradecido por
+          </ThemedText>
+          <TextInput
+            style={[styles.input, styles.mv10]}
+            placeholder="¿Por qué te sientes agradecido hoy?"
+            placeholderTextColor="#B0B8C6"
+            value={state ? state[formattedToday!]?.grateful[0] ?? "" : ""}
+            onChangeText={(text) => handleGratefulChange(0, text)}
+            editable={!loading}
+          />
+          <TextInput
+            style={[styles.input, styles.mt10]}
+            placeholder="Algo más por lo que te sientes agradecido"
+            placeholderTextColor="#B0B8C6"
+            value={state ? state[formattedToday!]?.grateful[1] ?? "" : ""}
+            onChangeText={(text) => handleGratefulChange(1, text)}
+            editable={!loading}
+          />
+        </ThemedView>
+
+        <ThemedView style={styles.pb20}>
+          <ThemedText style={styles.textAlignCenter} type="author">
+            He aprendido
+          </ThemedText>
+          <TextInput
+            style={[styles.input, styles.textArea, styles.mv10]}
+            placeholder="Escribe algo que hayas aprendido..."
+            placeholderTextColor="#B0B8C6"
+            multiline={true}
+            numberOfLines={4}
+            value={state ? state[formattedToday!]?.learned : ""}
+            onChangeText={(text) => handleLearnedChange(text)}
+            editable={!loading}
+          />
+        </ThemedView>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
