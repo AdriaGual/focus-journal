@@ -73,9 +73,9 @@ export default function TabTwoScreen() {
   };
 
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView style={styles.diaryContainer}>
       <FlatList
-        data={days} // days now contains only valid DayItems
+        data={days}
         renderItem={renderItem}
         keyExtractor={(item) => item.date}
         contentContainerStyle={styles.listContainer}

@@ -52,14 +52,14 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     padding: 4,
     marginLeft: 16,
-    width: 30,
+    width: 45,
     textAlign: "center",
   },
   underline: {
     textDecorationLine: "underline",
   },
   agendaContainer: {
-    flexDirection: "column", // Use column to stack tasks, or wrap rows in another container
+    flexDirection: "column",
     flexWrap: "nowrap",
   },
   agendaRow: {
@@ -84,14 +84,8 @@ const styles = StyleSheet.create({
     padding: 15,
     marginVertical: 10,
     borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
+    borderWidth: 1,
+    borderColor: '#ccc'
   },
   dateText: {
     fontSize: 18,
@@ -103,7 +97,6 @@ const styles = StyleSheet.create({
   },
   detailsContainer: {
     padding: 10,
-    backgroundColor: '#f9f9f9',
     borderRadius: 4
   },
   scrollContainer: {
@@ -113,6 +106,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: '#ffffff'
   },
+  diaryContainer: {
+    paddingTop: 20,
+    flex: 1,
+    backgroundColor: '#ffffff',
+  }
 });
 
 
