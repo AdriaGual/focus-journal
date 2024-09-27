@@ -1,6 +1,7 @@
 // i18n/i18n.js
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import * as Localization from 'expo-localization';
 
 const resources = {
   en: {
@@ -62,12 +63,16 @@ const resources = {
   },
 };
 
+const deviceLanguage = Localization.locale.split('-')[0];
+const supportedLanguages = ['en', 'es', 'ca'];
+const language = supportedLanguages.includes(deviceLanguage) ? deviceLanguage : 'en';
+
 i18n
   .use(initReactI18next)
   .init({
     compatibilityJSON: 'v3',
     resources,
-    lng: "en",
+    lng: language,
     fallbackLng: "ca",
     interpolation: {
       escapeValue: false,
