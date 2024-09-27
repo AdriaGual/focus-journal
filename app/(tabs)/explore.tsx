@@ -5,12 +5,12 @@ import { useAppContext } from "@/providers/AppProvider";
 import styles from "@/styles/styles";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { FlatList, TouchableOpacity, View } from "react-native";
 
 export default function TabTwoScreen() {
   const { state } = useAppContext();
-
-  console.log(state);
+  const { t } = useTranslation();
 
   const days: DayItem[] = Object.keys(state ?? {})
     .map((date) => ({
@@ -32,7 +32,7 @@ export default function TabTwoScreen() {
         >
           <ThemedText style={styles.dateText}>{item.date}</ThemedText>
           <ThemedText style={styles.daySummary}>
-            Productividad: {item.dayInfo.productivity} | Ánimo:{" "}
+            {t("productivity")}: {item.dayInfo.productivity} | {t("mood")}:{" "}
             {item.dayInfo.mood}
           </ThemedText>
           <Ionicons
@@ -46,7 +46,9 @@ export default function TabTwoScreen() {
                   (task) => item.dayInfo.agenda[task]?.text
                 ) && (
                   <>
-                    <ThemedText type="defaultSemiBold">Agenda</ThemedText>
+                    <ThemedText type="defaultSemiBold">
+                      {t("agenda")}
+                    </ThemedText>
                     {["task1", "task2", "task3", "task4"].map(
                       (task, taskIndex) =>
                         item.dayInfo.agenda[task]?.text ? (
@@ -63,7 +65,7 @@ export default function TabTwoScreen() {
               ) && (
                 <>
                   <ThemedText type="defaultSemiBold">
-                    Estoy agradecido por
+                    {t("gratefulFor")}
                   </ThemedText>
                   {item.dayInfo.grateful.map(
                     (gratefulItem, gratefulIndex) =>
@@ -78,7 +80,7 @@ export default function TabTwoScreen() {
 
               {item.dayInfo.learned && (
                 <>
-                  <ThemedText type="defaultSemiBold">He aprendido</ThemedText>
+                  <ThemedText type="defaultSemiBold">{t("learned")}</ThemedText>
                   <ThemedText type="details">{item.dayInfo.learned}</ThemedText>
                 </>
               )}
