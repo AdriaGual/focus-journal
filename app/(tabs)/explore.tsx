@@ -25,7 +25,7 @@ export default function TabTwoScreen() {
     const isExpanded = expandedIndex === index;
 
     return (
-      <View key={item.date}>
+      <View key={index}>
         <TouchableOpacity
           style={styles.dayItem}
           onPress={() => setExpandedIndex(isExpanded ? null : index)}
@@ -58,16 +58,21 @@ export default function TabTwoScreen() {
                   </>
                 )}
 
-                {item.dayInfo.grateful.some(gratefulItem => gratefulItem.trim() !== '') && (
+              {item.dayInfo.grateful.some(
+                (gratefulItem) => gratefulItem.trim() !== ""
+              ) && (
                 <>
                   <ThemedText type="defaultSemiBold">
                     Estoy agradecido por
                   </ThemedText>
-                  {item.dayInfo.grateful.map((gratefulItem, gratefulIndex) => (
-                    <ThemedText key={gratefulIndex} type="details">
-                      {gratefulItem}
-                    </ThemedText>
-                  ))}
+                  {item.dayInfo.grateful.map(
+                    (gratefulItem, gratefulIndex) =>
+                      gratefulItem !== "" && (
+                        <ThemedText key={gratefulIndex} type="details">
+                          {gratefulItem}
+                        </ThemedText>
+                      )
+                  )}
                 </>
               )}
 
