@@ -41,30 +41,42 @@ export default function TabTwoScreen() {
           />
           {isExpanded && (
             <View style={styles.detailsContainer}>
-              <ThemedText type="defaultSemiBold">Agenda</ThemedText>
-              {["task1", "task2", "task3", "task4"].map((task, taskIndex) => (
-                <ThemedText key={taskIndex} type="details">
-                  {item.dayInfo.agenda[task]?.text || "No data"}
-                </ThemedText>
-              ))}
+              {item.dayInfo.agenda &&
+                Object.keys(item.dayInfo.agenda).some(
+                  (task) => item.dayInfo.agenda[task]?.text
+                ) && (
+                  <>
+                    <ThemedText type="defaultSemiBold">Agenda</ThemedText>
+                    {["task1", "task2", "task3", "task4"].map(
+                      (task, taskIndex) =>
+                        item.dayInfo.agenda[task]?.text ? (
+                          <ThemedText key={taskIndex} type="details">
+                            {item.dayInfo.agenda[task].text}
+                          </ThemedText>
+                        ) : null
+                    )}
+                  </>
+                )}
 
-              <ThemedText type="defaultSemiBold">
-                Estoy agradecido por
-              </ThemedText>
-              {item.dayInfo.grateful.length > 0 ? (
-                item.dayInfo.grateful.map((gratefulItem, gratefulIndex) => (
-                  <ThemedText key={gratefulIndex} type="details">
-                    {gratefulItem}
+                {item.dayInfo.grateful.some(gratefulItem => gratefulItem.trim() !== '') && (
+                <>
+                  <ThemedText type="defaultSemiBold">
+                    Estoy agradecido por
                   </ThemedText>
-                ))
-              ) : (
-                <ThemedText type="details">No data</ThemedText>
+                  {item.dayInfo.grateful.map((gratefulItem, gratefulIndex) => (
+                    <ThemedText key={gratefulIndex} type="details">
+                      {gratefulItem}
+                    </ThemedText>
+                  ))}
+                </>
               )}
 
-              <ThemedText type="defaultSemiBold">He aprendido</ThemedText>
-              <ThemedText type="details">
-                {item.dayInfo.learned || "No data"}
-              </ThemedText>
+              {item.dayInfo.learned && (
+                <>
+                  <ThemedText type="defaultSemiBold">He aprendido</ThemedText>
+                  <ThemedText type="details">{item.dayInfo.learned}</ThemedText>
+                </>
+              )}
             </View>
           )}
         </TouchableOpacity>

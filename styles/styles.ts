@@ -96,7 +96,6 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   detailsContainer: {
-    padding: 10,
     borderRadius: 4
   },
   scrollContainer: {
