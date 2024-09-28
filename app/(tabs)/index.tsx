@@ -108,19 +108,18 @@ export default function HomeScreen() {
   };
 
   useEffect(() => {
-    setLoading(true);
 
     const today = new Date();
-    today.setHours(today.getHours() + 2); // Add 2 hours to the current time
+    today.setHours(today.getHours() + 2);
     setToday(today);
     const formattedDateString = today.toISOString().split("T")[0];
     setFormattedToday(formattedDateString);
+    const randomIndex = Math.floor(Math.random() * quotes.length);
 
     if (state && !state[formattedDateString]) {
       const existingDays = Object.values(state).map((entry) => entry.day);
       const maxDay = existingDays.length > 0 ? Math.max(...existingDays) : 0;
 
-      const randomIndex = Math.floor(Math.random() * quotes.length);
       defaultDayEntry.quote = quotes[randomIndex];
       defaultDayEntry.day = maxDay + 1;
 
@@ -128,9 +127,20 @@ export default function HomeScreen() {
         ...prevState,
         [formattedDateString]: defaultDayEntry,
       }));
+    } else {
+      const newDayEntry = {
+        ...defaultDayEntry,
+        quote: quotes[randomIndex],
+        day: 1,
+      };
+
+      setState((prevState) => ({
+        ...prevState,
+        [formattedDateString]: newDayEntry,
+      }));
     }
     setLoading(false);
-  }, [state, setState]);
+  }, [setState]);
 
   return (
     <KeyboardAvoidingView
