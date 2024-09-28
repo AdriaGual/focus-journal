@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "focus-journal",
+    "name": "Focus Journal",
     "slug": "focus-journal",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -20,6 +20,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "versionCode": 1,
       "package": "com.adriagual.focusjournal"
     },
     "web": {
