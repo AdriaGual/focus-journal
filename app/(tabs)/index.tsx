@@ -14,10 +14,11 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
+  Button,
 } from "react-native";
 
 export default function HomeScreen() {
-  const { state, setState } = useAppContext() as AppContextType;
+  const { state, setState, clearState } = useAppContext() as AppContextType;
   const [loading, setLoading] = useState<boolean>(true);
   const [formattedToday, setFormattedToday] = useState<string | undefined>();
   const [today, setToday] = useState<Date | undefined>();
@@ -116,18 +117,7 @@ export default function HomeScreen() {
     setFormattedToday(formattedDateString);
     const randomIndex = Math.floor(Math.random() * quotes.length);
 
-    if (state && !state[formattedDateString]) {
-      const existingDays = Object.values(state).map((entry) => entry.day);
-      const maxDay = existingDays.length > 0 ? Math.max(...existingDays) : 0;
-
-      defaultDayEntry.quote = quotes[randomIndex];
-      defaultDayEntry.day = maxDay + 1;
-
-      setState((prevState) => ({
-        ...prevState,
-        [formattedDateString]: defaultDayEntry,
-      }));
-    } else {
+    if (!state){
       const newDayEntry = {
         ...defaultDayEntry,
         quote: quotes[randomIndex],
@@ -139,8 +129,21 @@ export default function HomeScreen() {
         [formattedDateString]: newDayEntry,
       }));
     }
+
+    if (state && !state[formattedDateString]) {
+      const existingDays = Object.values(state).map((entry) => entry.day);
+      const maxDay = existingDays.length > 0 ? Math.max(...existingDays) : 0;
+
+      defaultDayEntry.quote = quotes[randomIndex];
+      defaultDayEntry.day = maxDay + 1;
+
+      setState((prevState) => ({
+        ...prevState,
+        [formattedDateString]: defaultDayEntry,
+      }));
+    }
     setLoading(false);
-  }, [setState]);
+  }, [state, setState]);
 
   return (
     <KeyboardAvoidingView
@@ -181,7 +184,6 @@ export default function HomeScreen() {
               editable={!loading}
             />
           </ThemedView>
-
           <ThemedView style={[styles.row]}>
             <ThemedText type="defaultSemiBold">{t("mood")}:</ThemedText>
             <TextInput
@@ -296,6 +298,8 @@ export default function HomeScreen() {
             editable={!loading}
           />
         </ThemedView>
+        <Button title="Clear State" onPress={()=>clearState()}></Button>
+
       </ScrollView>
     </KeyboardAvoidingView>
   );
